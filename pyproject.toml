@@ -1,12 +1,55 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
-name = "zugferd-client-python"
+name = "zugferd-client"
 version = "0.1.0"
-description = "Official Python examples for the E-Rechnung API (ZUGFeRD & XRechnung)"
+description = "Offizieller Python-Client für die E-Rechnung API (ZUGFeRD 2.2 / Factur-X & XRechnung nach EN 16931)"
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
 authors = [
-    {name = "E-Rechnung API", email = "hello@e-rechnung-api.fly.dev"},
+    { name = "E-Rechnung API", email = "hello@e-rechnung-api.fly.dev" }
+]
+keywords = [
+    "zugferd",
+    "factur-x",
+    "xrechnung",
+    "en16931",
+    "e-rechnung",
+    "invoice",
+    "pdf-a3",
+    "billing",
+    "fastapi"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Office/Business :: Financial :: Point-Of-Sale",
+    "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 dependencies = [
-    "requests>=2.31.0",
+    "requests>=2.28.0",
 ]
-readme = "README.md"
-requires-python = ">= 3.8"
+
+[project.urls]
+Homepage = "https://e-rechnung-api.fly.dev"
+Documentation = "https://e-rechnung-api.fly.dev/docs"
+Validator = "https://e-rechnung-api.fly.dev/validator"
+Repository = "https://github.com/andregrunert-ctrl/zugferd-api-examples"
+"Bug Tracker" = "https://github.com/andregrunert-ctrl/zugferd-api-examples/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["zugferd_client*"]
