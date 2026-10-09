@@ -1,0 +1,143 @@
+{
+  "name": "ZUGFeRD E-Rechnung Generator (Fly.io API)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "generate-zugferd-invoice",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "11d73c68-e4b7-4a0b-930f-b0df576a0101",
+      "name": "Webhook: Rechnungsdaten empfangen",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        240,
+        300
+      ],
+      "webhookId": "zugferd-generate-webhook"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://e-rechnung-api.fly.dev/v1/invoice/generate",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-API-Key",
+              "value": "={{ $env.ZUGFERD_API_KEY || 'zg_test_ouroboros_001' }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.body || $json) }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file",
+              "outputPropertyName": "invoice_pdf"
+            }
+          }
+        }
+      },
+      "id": "22d73c68-e4b7-4a0b-930f-b0df576a0102",
+      "name": "HTTP Request: ZUGFeRD API aufrufen",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        520,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "binary",
+        "responseDataSource": "firstNodeOutput",
+        "dataPropertyName": "invoice_pdf",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "application/pdf"
+              },
+              {
+                "name": "Content-Disposition",
+                "value": "attachment; filename=\"e-rechnung.pdf\""
+              }
+            ]
+          }
+        }
+      },
+      "id": "33d73c68-e4b7-4a0b-930f-b0df576a0103",
+      "name": "Respond: PDF zurückgeben",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        800,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "content": "### 🚀 ZUGFeRD & XRechnung Workflow Blueprint\n\n1. **Webhook:** Nimmt ein Rechnungs-JSON entgegen (z. B. aus Stripe, WooCommerce, HubSpot, Notion).\n2. **HTTP Request:** Sendet die Daten an `https://e-rechnung-api.fly.dev/v1/invoice/generate`.\n   - Standardmäßig mit Test-Key `zg_test_ouroboros_001` aktiv.\n   - Für Produktion: Trage deinen Key in den Header `X-API-Key` ein.\n3. **Respond:** Gibt die fertige, rechtskonforme PDF/A-3 Datei mit eingebetteter ZUGFeRD-XML zurück.",
+        "height": 260,
+        "width": 640
+      },
+      "id": "44d73c68-e4b7-4a0b-930f-b0df576a0104",
+      "name": "Hinweis",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        220,
+        -10
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook: Rechnungsdaten empfangen": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request: ZUGFeRD API aufrufen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request: ZUGFeRD API aufrufen": {
+      "main": [
+        [
+          {
+            "node": "Respond: PDF zurückgeben",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": [
+    {
+      "name": "ZUGFeRD"
+    },
+    {
+      "name": "E-Rechnung"
+    },
+    {
+      "name": "PDF"
+    }
+  ]
+}

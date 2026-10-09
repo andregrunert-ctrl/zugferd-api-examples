@@ -1,0 +1,118 @@
+{
+  "name": "generateInvoice",
+  "label": "ZUGFeRD-Rechnung erstellen",
+  "description": "Erzeugt eine rechtskonforme ZUGFeRD / Factur-X PDF/A-3 Rechnung nach EN 16931 aus strukturierten Daten.",
+  "type": "action",
+  "connection": "zugferd-api-connection",
+  "communication": {
+    "url": "https://e-rechnung-api.fly.dev/v1/invoice/generate",
+    "method": "POST",
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "invoice_number": "{{parameters.invoice_number}}",
+      "issue_date": "{{parameters.issue_date}}",
+      "currency": "{{parameters.currency || 'EUR'}}",
+      "logo_url": "{{parameters.logo_url}}",
+      "seller": {
+        "name": "{{parameters.seller.name}}",
+        "street": "{{parameters.seller.street}}",
+        "city": "{{parameters.seller.city}}",
+        "zip_code": "{{parameters.seller.zip_code}}",
+        "country": "{{parameters.seller.country || 'DE'}}",
+        "vat_id": "{{parameters.seller.vat_id}}",
+        "iban": "{{parameters.seller.iban}}"
+      },
+      "buyer": {
+        "name": "{{parameters.buyer.name}}",
+        "street": "{{parameters.buyer.street}}",
+        "city": "{{parameters.buyer.city}}",
+        "zip_code": "{{parameters.buyer.zip_code}}",
+        "country": "{{parameters.buyer.country || 'DE'}}"
+      },
+      "line_items": "{{parameters.line_items}}"
+    },
+    "response": {
+      "binary": true,
+      "output": {
+        "fileName": "{{parameters.invoice_number}}.pdf",
+        "data": "{{body}}"
+      }
+    }
+  },
+  "parameters": [
+    {
+      "name": "invoice_number",
+      "type": "text",
+      "label": "Rechnungsnummer",
+      "required": true,
+      "help": "Eindeutige Rechnungsnummer (z. B. RE-2026-001)"
+    },
+    {
+      "name": "issue_date",
+      "type": "date",
+      "label": "Rechnungsdatum",
+      "required": true,
+      "help": "Format: YYYY-MM-DD"
+    },
+    {
+      "name": "currency",
+      "type": "text",
+      "label": "Währung",
+      "required": false,
+      "default": "EUR"
+    },
+    {
+      "name": "logo_url",
+      "type": "url",
+      "label": "Logo URL",
+      "required": false,
+      "help": "Öffentliche URL zu einem JPG- oder PNG-Logo"
+    },
+    {
+      "name": "seller",
+      "type": "collection",
+      "label": "Verkäufer / Rechnungssteller",
+      "required": true,
+      "spec": [
+        { "name": "name", "type": "text", "label": "Firmenname", "required": true },
+        { "name": "street", "type": "text", "label": "Straße & Hausnummer", "required": true },
+        { "name": "zip_code", "type": "text", "label": "PLZ", "required": true },
+        { "name": "city", "type": "text", "label": "Stadt", "required": true },
+        { "name": "country", "type": "text", "label": "Ländercode (z. B. DE)", "required": true, "default": "DE" },
+        { "name": "vat_id", "type": "text", "label": "USt-IdNr. (z. B. DE123456789)", "required": true },
+        { "name": "iban", "type": "text", "label": "IBAN", "required": true }
+      ]
+    },
+    {
+      "name": "buyer",
+      "type": "collection",
+      "label": "Käufer / Rechnungsempfänger",
+      "required": true,
+      "spec": [
+        { "name": "name", "type": "text", "label": "Kundenname / Firma", "required": true },
+        { "name": "street", "type": "text", "label": "Straße & Hausnummer", "required": true },
+        { "name": "zip_code", "type": "text", "label": "PLZ", "required": true },
+        { "name": "city", "type": "text", "label": "Stadt", "required": true },
+        { "name": "country", "type": "text", "label": "Ländercode (z. B. DE)", "required": true, "default": "DE" }
+      ]
+    },
+    {
+      "name": "line_items",
+      "type": "array",
+      "label": "Rechnungspositionen",
+      "required": true,
+      "spec": {
+        "type": "collection",
+        "label": "Position",
+        "spec": [
+          { "name": "description", "type": "text", "label": "Bezeichnung / Leistungsbeschreibung", "required": true },
+          { "name": "quantity", "type": "number", "label": "Menge", "required": true },
+          { "name": "unit_price", "type": "number", "label": "Einzelpreis (Netto)", "required": true },
+          { "name": "tax_rate_percent", "type": "number", "label": "Steuersatz in % (z. B. 19)", "required": true, "default": 19 }
+        ]
+      }
+    }
+  ]
+}

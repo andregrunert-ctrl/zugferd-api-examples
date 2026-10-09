@@ -1,0 +1,23 @@
+{
+  "name": "zugferd-api-connection",
+  "label": "ZUGFeRD / XRechnung API",
+  "type": "api-key",
+  "communication": {
+    "headers": {
+      "X-API-Key": "{{connection.apiKey}}"
+    }
+  },
+  "parameters": [
+    {
+      "name": "apiKey",
+      "type": "text",
+      "label": "API Key",
+      "required": true,
+      "help": "Trage deinen ZUGFeRD API-Key ein (z. B. zg_live_... oder für Tests zg_test_ouroboros_001)."
+    }
+  ],
+  "test": {
+    "url": "https://e-rechnung-api.fly.dev/v1/invoice/credits",
+    "method": "GET"
+  }
+}

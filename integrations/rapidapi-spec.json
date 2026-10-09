@@ -1,0 +1,767 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "ZUGFeRD & XRechnung E-Invoice API",
+    "description": "Erstelle und validiere rechtskonforme ZUGFeRD / Factur-X & XRechnung PDF/A-3 Rechnungen nach europäischer Norm EN 16931 per einfachem REST-Aufruf. Entwickelt für ERPs, Webshops und No-Code Automatisierungen.",
+    "version": "1.0.0",
+    "contact": {
+      "name": "E-Rechnung API Support",
+      "url": "https://e-rechnung-api.fly.dev"
+    }
+  },
+  "paths": {
+    "/v1/invoice/generate": {
+      "post": {
+        "tags": [
+          "1. Dokumenten-Engine"
+        ],
+        "summary": "1. PDF & ZUGFeRD generieren (Template)",
+        "description": "Baut ein vollständiges, **deutsches PDF-Layout** aus deinen JSON-Daten und bettet das unsichtbare ZUGFeRD/Factur-X XML (EN 16931) direkt ein.\n\n**So geht's:**\n1. Klicke auf 'Authorize' (oben rechts) und gib deinen API-Key ein.\n2. Sende die Rechnungsdaten als JSON.\n3. Du erhältst ein fertiges, rechtssicheres PDF/A-3 Dokument zurück!",
+        "operationId": "generate_invoice_v1_invoice_generate_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InvoiceRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Das fertige PDF/A-3 Dokument inkl. eingebettetem XML.",
+            "content": {
+              "application/json": {
+                "schema": {}
+              },
+              "application/pdf": {}
+            }
+          },
+          "401": {
+            "description": "API-Key ungültig oder fehlend",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "Invalid or missing X-API-Key"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Guthaben aufgebraucht",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "Keine Credits mehr verfügbar. Bitte Guthaben aufladen."
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Eingabe- oder Rechenfehler im Rechnungs-JSON (Self-Healing-Schutz)",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": [
+                    {
+                      "loc": [
+                        "body",
+                        "total_gross_amount"
+                      ],
+                      "msg": "Value error, Mathematischer Fehler: Übergebene Bruttosumme (500.00) stimmt nicht mit der berechneten Summe (463.99) überein.",
+                      "type": "value_error"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/v1/invoice/embed": {
+      "post": {
+        "tags": [
+          "1. Dokumenten-Engine"
+        ],
+        "summary": "2. ZUGFeRD in bestehendes PDF einbetten (Overlay)",
+        "description": "Nutze diesen Endpunkt, wenn du bereits ein eigenes **fertiges Kunden-PDF** hast und es in eine E-Rechnung verwandeln willst.\n\n**So geht's:**\n1. Klicke auf 'Authorize' (oben rechts) und gib deinen API-Key ein.\n2. Lade unter `file` dein eigenes PDF hoch.\n3. Füge unter `invoice_data` den JSON-String mit den Rechnungsdaten ein.\n4. Wir betten das ZUGFeRD XML in dein PDF ein und konvertieren es verlustfrei in ein PDF/A-3 Format!",
+        "operationId": "embed_invoice_v1_invoice_embed_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_embed_invoice_v1_invoice_embed_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Das bestehende PDF, erweitert um das eingebettete XML (PDF/A-3 konform).",
+            "content": {
+              "application/json": {
+                "schema": {}
+              },
+              "application/pdf": {}
+            }
+          },
+          "401": {
+            "description": "API-Key ungültig oder fehlend",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "Invalid or missing X-API-Key"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Guthaben aufgebraucht",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "Keine Credits mehr verfügbar. Bitte Guthaben aufladen."
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Eingabe- oder Rechenfehler im Rechnungs-JSON (Self-Healing-Schutz)",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": [
+                    {
+                      "loc": [
+                        "body",
+                        "total_gross_amount"
+                      ],
+                      "msg": "Value error, Mathematischer Fehler: Übergebene Bruttosumme (500.00) stimmt nicht mit der berechneten Summe (463.99) überein.",
+                      "type": "value_error"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/v1/invoice/credits": {
+      "get": {
+        "tags": [
+          "2. Account & Billing"
+        ],
+        "summary": "2. API-Key & Credits prüfen",
+        "description": "Ein einfacher Endpunkt, um deinen API-Key zu testen und dein aktuelles Guthaben abzufragen, ohne ein PDF zu generieren (kostet keine Credits).",
+        "operationId": "check_credits_v1_invoice_credits_get",
+        "responses": {
+          "200": {
+            "description": "Erfolgreiche Prüfung des Keys",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "api_key": "zg_live_...",
+                  "tier": "prepaid_100",
+                  "is_test": false
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "API-Key ungültig oder fehlend",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "Invalid or missing X-API-Key"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/v1/invoice/xrechnung": {
+      "post": {
+        "tags": [
+          "1. Dokumenten-Engine"
+        ],
+        "summary": "3. XRechnung (nur XML) erzeugen",
+        "description": "Erstellt eine reine EN 16931 XML-Datei (XRechnung) ohne PDF. Pflicht für B2G (Behörden).",
+        "operationId": "generate_xrechnung_v1_invoice_xrechnung_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InvoiceRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Die fertige XRechnung XML-Datei.",
+            "content": {
+              "application/json": {
+                "schema": {}
+              },
+              "application/xml": {}
+            }
+          },
+          "401": {
+            "description": "API-Key ungültig oder fehlend",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "Invalid or missing X-API-Key"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Guthaben aufgebraucht",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "Keine Credits mehr verfügbar. Bitte Guthaben aufladen."
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Eingabe- oder Rechenfehler im Rechnungs-JSON (Self-Healing-Schutz)",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": [
+                    {
+                      "loc": [
+                        "body",
+                        "total_gross_amount"
+                      ],
+                      "msg": "Value error, Mathematischer Fehler: Übergebene Bruttosumme (500.00) stimmt nicht mit der berechneten Summe (463.99) überein.",
+                      "type": "value_error"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/v1/invoice/validate": {
+      "post": {
+        "tags": [
+          "1. Dokumenten-Engine"
+        ],
+        "summary": "4. ZUGFeRD / EN 16931 Validierung",
+        "description": "Lade ein ZUGFeRD-PDF oder ein XML-Dokument hoch, um es auf Einhaltung der EN 16931 Norm zu prüfen.",
+        "operationId": "validate_invoice_v1_invoice_validate_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_validate_invoice_v1_invoice_validate_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Validierung erfolgreich durchgeführt",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationResponse"
+                },
+                "examples": {
+                  "valid_invoice": {
+                    "summary": "1. Gültige E-Rechnung (EN 16931 konform)",
+                    "value": {
+                      "is_valid": true,
+                      "format_detected": "PDF (ZUGFeRD / Factur-X EN 16931)",
+                      "errors": []
+                    }
+                  },
+                  "invalid_invoice": {
+                    "summary": "2. Fehlerhafte E-Rechnung (Schema-Abweichung)",
+                    "value": {
+                      "is_valid": false,
+                      "format_detected": "XML",
+                      "errors": [
+                        "Fehlender Knoten: ram:BuyerTradeParty (Käuferdaten fehlen).",
+                        "Offizieller XSD-Schema-Fehler (EN 16931): Element 'ram:TaxBasisTotalAmount': This element is not expected."
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Ungültiger Request (z. B. keine Datei im Feld 'file' übergeben)",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": [
+                    {
+                      "loc": [
+                        "body",
+                        "file"
+                      ],
+                      "msg": "Field required (Bitte eine PDF- oder XML-Datei im Parameter 'file' anhängen)",
+                      "type": "missing"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "API-Key ungültig oder fehlend",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "Invalid or missing X-API-Key"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Body_embed_invoice_v1_invoice_embed_post": {
+        "properties": {
+          "invoice_data": {
+            "type": "string",
+            "title": "Invoice Data"
+          },
+          "file": {
+            "type": "string",
+            "contentMediaType": "application/octet-stream",
+            "title": "File"
+          }
+        },
+        "type": "object",
+        "required": [
+          "invoice_data",
+          "file"
+        ],
+        "title": "Body_embed_invoice_v1_invoice_embed_post"
+      },
+      "Body_validate_invoice_v1_invoice_validate_post": {
+        "properties": {
+          "file": {
+            "type": "string",
+            "contentMediaType": "application/octet-stream",
+            "title": "File"
+          }
+        },
+        "type": "object",
+        "required": [
+          "file"
+        ],
+        "title": "Body_validate_invoice_v1_invoice_validate_post"
+      },
+      "Buyer": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "street": {
+            "type": "string",
+            "title": "Street"
+          },
+          "city": {
+            "type": "string",
+            "title": "City"
+          },
+          "zip_code": {
+            "type": "string",
+            "title": "Zip Code"
+          },
+          "country": {
+            "type": "string",
+            "title": "Country"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "street",
+          "city",
+          "zip_code",
+          "country"
+        ],
+        "title": "Buyer"
+      },
+      "InvoiceRequest": {
+        "properties": {
+          "invoice_number": {
+            "type": "string",
+            "title": "Invoice Number",
+            "description": "Die eindeutige Rechnungsnummer"
+          },
+          "issue_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Issue Date",
+            "description": "Rechnungsdatum (YYYY-MM-DD)"
+          },
+          "seller": {
+            "$ref": "#/components/schemas/Seller",
+            "description": "Details des Rechnungsstellers"
+          },
+          "buyer": {
+            "$ref": "#/components/schemas/Buyer",
+            "description": "Details des Rechnungsempfängers"
+          },
+          "line_items": {
+            "items": {
+              "$ref": "#/components/schemas/LineItem"
+            },
+            "type": "array",
+            "title": "Line Items",
+            "description": "Die einzelnen Rechnungspositionen"
+          },
+          "currency": {
+            "type": "string",
+            "title": "Currency",
+            "description": "Währung (z.B. EUR)",
+            "default": "EUR"
+          },
+          "logo_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Logo Url",
+            "description": "URL zu einem Firmenlogo (JPG/PNG), das oben rechts auf das PDF gedruckt wird"
+          },
+          "total_net_amount": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Total Net Amount",
+            "description": "Wird automatisch berechnet, falls nicht übergeben"
+          },
+          "tax_amounts": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+                    }
+                  ]
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tax Amounts",
+            "description": "Wird automatisch berechnet, falls nicht übergeben"
+          },
+          "tax_bases": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+                    }
+                  ]
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tax Bases",
+            "description": "Automatisch berechnete Netto-Summen pro Steuersatz"
+          },
+          "total_gross_amount": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Total Gross Amount",
+            "description": "Wird automatisch berechnet, falls nicht übergeben"
+          }
+        },
+        "type": "object",
+        "required": [
+          "invoice_number",
+          "issue_date",
+          "seller",
+          "buyer",
+          "line_items"
+        ],
+        "title": "InvoiceRequest",
+        "example": {
+          "buyer": {
+            "city": "München",
+            "country": "DE",
+            "name": "Kunden AG",
+            "street": "Nebenstraße 2",
+            "zip_code": "80331"
+          },
+          "currency": "EUR",
+          "invoice_number": "RE-2026-1001",
+          "issue_date": "2026-09-29",
+          "line_items": [
+            {
+              "description": "Softwareentwicklung (Stunden)",
+              "quantity": "10.0",
+              "tax_rate_percent": "19.0",
+              "unit_price": "100.00"
+            },
+            {
+              "description": "Server-Hosting",
+              "quantity": "1.0",
+              "tax_rate_percent": "19.0",
+              "unit_price": "50.00"
+            }
+          ],
+          "seller": {
+            "city": "Berlin",
+            "country": "DE",
+            "iban": "DE12345678901234567890",
+            "name": "Muster GmbH",
+            "street": "Hauptstraße 1",
+            "vat_id": "DE123456789",
+            "zip_code": "10115"
+          }
+        }
+      },
+      "LineItem": {
+        "properties": {
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "quantity": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              }
+            ],
+            "title": "Quantity"
+          },
+          "unit_price": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              }
+            ],
+            "title": "Unit Price"
+          },
+          "tax_rate_percent": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              }
+            ],
+            "title": "Tax Rate Percent"
+          }
+        },
+        "type": "object",
+        "required": [
+          "description",
+          "quantity",
+          "unit_price",
+          "tax_rate_percent"
+        ],
+        "title": "LineItem"
+      },
+      "Seller": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "street": {
+            "type": "string",
+            "title": "Street"
+          },
+          "city": {
+            "type": "string",
+            "title": "City"
+          },
+          "zip_code": {
+            "type": "string",
+            "title": "Zip Code"
+          },
+          "country": {
+            "type": "string",
+            "title": "Country"
+          },
+          "vat_id": {
+            "type": "string",
+            "title": "Vat Id"
+          },
+          "iban": {
+            "type": "string",
+            "title": "Iban"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "street",
+          "city",
+          "zip_code",
+          "country",
+          "vat_id",
+          "iban"
+        ],
+        "title": "Seller"
+      },
+      "ValidationResponse": {
+        "properties": {
+          "is_valid": {
+            "type": "boolean",
+            "title": "Is Valid"
+          },
+          "format_detected": {
+            "type": "string",
+            "title": "Format Detected"
+          },
+          "errors": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Errors"
+          }
+        },
+        "type": "object",
+        "required": [
+          "is_valid",
+          "format_detected",
+          "errors"
+        ],
+        "title": "ValidationResponse"
+      }
+    },
+    "securitySchemes": {
+      "APIKeyHeader": {
+        "type": "apiKey",
+        "description": "Dein persönlicher E-Rechnung API-Key",
+        "in": "header",
+        "name": "X-API-Key"
+      },
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-API-Key",
+        "description": "Dein persönlicher API-Key (z. B. zg_live_... oder Test-Key zg_test_ouroboros_001)"
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "1. Dokumenten-Engine",
+      "description": "Erstellung, Einbettung und Validierung von ZUGFeRD / Factur-X Rechnungen."
+    },
+    {
+      "name": "2. Account & Billing",
+      "description": "Verwaltung von API-Keys, Prepaid-Credits und Stripe-Kundenportal."
+    },
+    {
+      "name": "3. System",
+      "description": "API-Status und Health-Checks."
+    }
+  ],
+  "servers": [
+    {
+      "url": "https://e-rechnung-api.fly.dev",
+      "description": "Produktions-Server"
+    }
+  ],
+  "security": [
+    {
+      "ApiKeyAuth": []
+    }
+  ]
+}

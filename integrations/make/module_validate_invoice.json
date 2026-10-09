@@ -1,0 +1,33 @@
+{
+  "name": "validateInvoice",
+  "label": "E-Rechnung validieren",
+  "description": "Prüft eine PDF- oder XML-Rechnung auf ZUGFeRD / Factur-X / XRechnung Konformität.",
+  "type": "action",
+  "connection": "zugferd-api-connection",
+  "communication": {
+    "url": "https://e-rechnung-api.fly.dev/v1/invoice/validate",
+    "method": "POST",
+    "headers": {
+      "Content-Type": "multipart/form-data"
+    },
+    "body": {
+      "file": "{{parameters.file}}"
+    },
+    "response": {
+      "output": {
+        "is_valid": "{{body.is_valid}}",
+        "format_detected": "{{body.format_detected}}",
+        "errors": "{{body.errors}}"
+      }
+    }
+  },
+  "parameters": [
+    {
+      "name": "file",
+      "type": "binary",
+      "label": "Rechnungsdatei (PDF oder XML)",
+      "required": true,
+      "help": "Übergebe das Rechnungsdokument aus einem vorherigen Modul (z. B. Google Drive, E-Mail-Anhang, HTTP)."
+    }
+  ]
+}
