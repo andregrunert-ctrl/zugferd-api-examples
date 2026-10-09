@@ -1,0 +1,12 @@
+[project]
+name = "zugferd-client-python"
+version = "0.1.0"
+description = "Official Python examples for the E-Rechnung API (ZUGFeRD & XRechnung)"
+authors = [
+    {name = "E-Rechnung API", email = "hello@e-rechnung-api.fly.dev"},
+]
+dependencies = [
+    "requests>=2.31.0",
+]
+readme = "README.md"
+requires-python = ">= 3.8"
