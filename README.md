@@ -1,7 +1,12 @@
-# ZUGFeRD / XRechnung Client (Python & Node.js)
+# ZUGFeRD / XRechnung Client (Python, Node.js &amp; No-Code)
 
-Offizielle Integrations-Beispiele für die [E-Rechnung API](https://e-rechnung-api.fly.dev). 
-Diese API wandelt strukturierte Rechnungsdaten (JSON) in rechtsgültige PDF/A-3-Dateien nach EN 16931 um.
+[![Live API Health Check](https://github.com/andregrunert-ctrl/zugferd-api-examples/actions/workflows/health-check.yml/badge.svg)](https://github.com/andregrunert-ctrl/zugferd-api-examples/actions/workflows/health-check.yml)
+[![Standard](https://img.shields.io/badge/Standard-EN%2016931%20%7C%20ZUGFeRD%202.2-blue)](https://e-rechnung-api.fly.dev)
+[![Format](https://img.shields.io/badge/Format-PDF%2FA--3%20%2B%20Factur--X-purple)](https://e-rechnung-api.fly.dev)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+
+Offizielle Integrations-Beispiele und Vorlagen für die [E-Rechnung API](https://e-rechnung-api.fly.dev). 
+Diese API wandelt strukturierte Rechnungsdaten (JSON) in rechtsgültige PDF/A-3-Dateien nach europäischer Norm **EN 16931** um.
 
 ## Schnellstart via cURL
 
