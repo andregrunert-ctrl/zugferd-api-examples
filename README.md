@@ -154,3 +154,9 @@ client = ZugferdClient(api_key="zg_live_...")
 ## 📄 Lizenz
 
 MIT License - Siehe [LICENSE](LICENSE) für Details.
+
+---
+
+## ⚖️ Markenhinweis & Disclaimer
+
+ZUGFeRD ist eine eingetragene Marke der **AWV e.V.** (*Arbeitsgemeinschaft für wirtschaftliche Verwaltung e.V.*) / FeRD. Dieses Projekt (`zugferd-client`) ist ein unabhängiges Open-Source-Projekt und steht in keiner geschäftlichen oder offiziellen Verbindung zur AWV e.V. oder dem Forum elektronische Rechnung Deutschland. Die Nennung der Marke erfolgt ausschließlich zur beschreibenden Angabe der Formatkompatibilität im Sinne von § 23 Abs. 1 Nr. 3 MarkenG.
