@@ -34,7 +34,7 @@ SAMPLE_INVOICE = {
 def test_client_init():
     client = ZugferdClient()
     assert client.api_key == "zg_test_ouroboros_001"
-    assert client.base_url == "https://e-rechnung-api.fly.dev"
+    assert client.base_url == "https://e-rechnung-cloud.de"
 
 def test_generate_invoice_and_validate():
     client = ZugferdClient()

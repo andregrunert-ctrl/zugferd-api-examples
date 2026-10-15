@@ -17,7 +17,7 @@
     }
   ],
   "test": {
-    "url": "https://e-rechnung-api.fly.dev/v1/invoice/credits",
+    "url": "https://e-rechnung-cloud.de/v1/invoice/credits",
     "method": "GET"
   }
 }

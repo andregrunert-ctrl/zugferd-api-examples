@@ -13,7 +13,7 @@ from .exceptions import (
 )
 from .models import ValidationResult, BillingStatus
 
-DEFAULT_BASE_URL = "https://e-rechnung-api.fly.dev"
+DEFAULT_BASE_URL = "https://e-rechnung-cloud.de"
 DEFAULT_TEST_KEY = "zg_test_ouroboros_001"
 
 class ZugferdClient:
@@ -34,7 +34,7 @@ class ZugferdClient:
         :param api_key: Dein persönlicher API-Key. Standardmäßig wird der öffentliche
                         Test-Key verwendet, falls kein Key übergeben oder per
                         Umgebungsvariable ZUGFERD_API_KEY gesetzt ist.
-        :param base_url: Die Basis-URL der API (Standard: https://e-rechnung-api.fly.dev).
+        :param base_url: Die Basis-URL der API (Standard: https://e-rechnung-cloud.de).
         :param timeout: Timeout in Sekunden für HTTP-Anfragen (Standard: 30s).
         """
         self.api_key = api_key or os.getenv("ZUGFERD_API_KEY", DEFAULT_TEST_KEY)

@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.8"
 license = { text = "MIT" }
 authors = [
-    { name = "E-Rechnung API", email = "hello@e-rechnung-api.fly.dev" }
+    { name = "E-Rechnung Cloud API", email = "support@e-rechnung-cloud.de" }
 ]
 keywords = [
     "zugferd",
@@ -44,9 +44,9 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://e-rechnung-api.fly.dev"
-Documentation = "https://e-rechnung-api.fly.dev/docs"
-Validator = "https://e-rechnung-api.fly.dev/validator"
+Homepage = "https://e-rechnung-cloud.de"
+Documentation = "https://e-rechnung-cloud.de/docs"
+Validator = "https://e-rechnung-cloud.de/validator"
 Repository = "https://github.com/andregrunert-ctrl/zugferd-api-examples"
 "Bug Tracker" = "https://github.com/andregrunert-ctrl/zugferd-api-examples/issues"
 

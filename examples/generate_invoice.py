@@ -1,11 +1,11 @@
 import requests
 
-API_URL = "https://e-rechnung-api.fly.dev/v1/invoice/generate"
+API_URL = "https://e-rechnung-cloud.de/v1/invoice/generate"
 API_KEY = "zg_test_ouroboros_001"
 
 payload = {
-    "invoice_number": "RE-2024-002",
-    "issue_date": "2024-10-09",
+    "invoice_number": "RE-2026-002",
+    "issue_date": "2026-10-15",
     "seller": {
         "name": "Python Beispiel GmbH",
         "street": "Testweg 1",

@@ -5,7 +5,7 @@
   "type": "action",
   "connection": "zugferd-api-connection",
   "communication": {
-    "url": "https://e-rechnung-api.fly.dev/v1/invoice/generate",
+    "url": "https://e-rechnung-cloud.de/v1/invoice/generate",
     "method": "POST",
     "headers": {
       "Content-Type": "application/json"

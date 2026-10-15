@@ -1,7 +1,7 @@
 import requests
 import os
 
-API_URL = "https://e-rechnung-api.fly.dev/v1/invoice/validate"
+API_URL = "https://e-rechnung-cloud.de/v1/invoice/validate"
 
 if not os.path.exists("invoice_test.pdf"):
     print("ERROR: 'invoice_test.pdf' nicht gefunden. Bitte führe zuerst generate_invoice.py aus.")

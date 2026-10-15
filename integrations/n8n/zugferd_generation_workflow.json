@@ -21,7 +21,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://e-rechnung-api.fly.dev/v1/invoice/generate",
+        "url": "https://e-rechnung-cloud.de/v1/invoice/generate",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -87,7 +87,7 @@
     },
     {
       "parameters": {
-        "content": "### 🚀 ZUGFeRD & XRechnung Workflow Blueprint\n\n1. **Webhook:** Nimmt ein Rechnungs-JSON entgegen (z. B. aus Stripe, WooCommerce, HubSpot, Notion).\n2. **HTTP Request:** Sendet die Daten an `https://e-rechnung-api.fly.dev/v1/invoice/generate`.\n   - Standardmäßig mit Test-Key `zg_test_ouroboros_001` aktiv.\n   - Für Produktion: Trage deinen Key in den Header `X-API-Key` ein.\n3. **Respond:** Gibt die fertige, rechtskonforme PDF/A-3 Datei mit eingebetteter ZUGFeRD-XML zurück.",
+        "content": "### 🚀 ZUGFeRD & XRechnung Workflow Blueprint\n\n1. **Webhook:** Nimmt ein Rechnungs-JSON entgegen (z. B. aus Stripe, WooCommerce, HubSpot, Notion).\n2. **HTTP Request:** Sendet die Daten an `https://e-rechnung-cloud.de/v1/invoice/generate`.\n   - Standardmäßig mit Test-Key `zg_test_ouroboros_001` aktiv.\n   - Für Produktion: Trage deinen Key in den Header `X-API-Key` ein.\n3. **Respond:** Gibt die fertige, rechtskonforme PDF/A-3 Datei mit eingebetteter ZUGFeRD-XML zurück.",
         "height": 260,
         "width": 640
       },

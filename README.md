@@ -2,15 +2,15 @@
 
 [![PyPI version](https://img.shields.io/badge/pypi-v0.1.0-blue.svg)](https://pypi.org/project/zugferd-client/)
 [![Python](https://img.shields.io/badge/python-3.8+-blue.svg)](https://pypi.org/project/zugferd-client/)
-[![Online Validator](https://img.shields.io/badge/Online%20Validator-Kostenlos%20testen-success.svg)](https://e-rechnung-api.fly.dev/validator)
+[![Online Validator](https://img.shields.io/badge/Online%20Validator-Kostenlos%20testen-success.svg)](https://e-rechnung-cloud.de/validator)
 [![Live API Health Check](https://github.com/andregrunert-ctrl/zugferd-api-examples/actions/workflows/health-check.yml/badge.svg)](https://github.com/andregrunert-ctrl/zugferd-api-examples/actions/workflows/health-check.yml)
-[![Standard](https://img.shields.io/badge/Standard-EN%2016931%20%7C%20ZUGFeRD%202.2-blue)](https://e-rechnung-api.fly.dev)
-[![Format](https://img.shields.io/badge/Format-PDF%2FA--3%20%2B%20Factur--X-purple)](https://e-rechnung-api.fly.dev)
+[![Standard](https://img.shields.io/badge/Standard-EN%2016931%20%7C%20ZUGFeRD%202.2-blue)](https://e-rechnung-cloud.de)
+[![Format](https://img.shields.io/badge/Format-PDF%2FA--3%20%2B%20Factur--X-purple)](https://e-rechnung-cloud.de)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
-Der offizielle, leichtgewichtige Python-Client für die [E-Rechnung API](https://e-rechnung-api.fly.dev). 
+Der offizielle, leichtgewichtige Python-Client für die [E-Rechnung API](https://e-rechnung-cloud.de). 
 
-> 🔍 **Kostenloser Online-Validator:** Teste und validiere deine ZUGFeRD- & XRechnung-Dateien direkt im Browser ohne Registrierung: [e-rechnung-api.fly.dev/validator](https://e-rechnung-api.fly.dev/validator)
+> 🔍 **Kostenloser Online-Validator:** Teste und validiere deine ZUGFeRD- & XRechnung-Dateien direkt im Browser ohne Registrierung: [e-rechnung-cloud.de/validator](https://e-rechnung-cloud.de/validator)
 
 Erstelle, verarbeite und validiere rechtskonforme elektronische Rechnungen nach **EN 16931** (ZUGFeRD 2.2 / Factur-X & XRechnung) mit nur 3 Zeilen Python-Code.
 
@@ -141,27 +141,27 @@ client = ZugferdClient(api_key="zg_live_...")
 
 ## 🌐 Nützliche Links
 
-* **Live-Web-Validator:** [https://e-rechnung-api.fly.dev/validator](https://e-rechnung-api.fly.dev/validator) (Kostenlos Dateien im Browser prüfen)
-* **Interaktive API-Dokumentation (Swagger):** [https://e-rechnung-api.fly.dev/docs](https://e-rechnung-api.fly.dev/docs)
-* **Preise & Tarife:** [https://e-rechnung-api.fly.dev/#pricing](https://e-rechnung-api.fly.dev/#pricing)
+* **Live-Web-Validator:** [https://e-rechnung-cloud.de/validator](https://e-rechnung-cloud.de/validator) (Kostenlos Dateien im Browser prüfen)
+* **Interaktive API-Dokumentation (Swagger):** [https://e-rechnung-cloud.de/docs](https://e-rechnung-cloud.de/docs)
+* **Preise & Tarife:** [https://e-rechnung-cloud.de/#pricing](https://e-rechnung-cloud.de/#pricing)
 * **Tutorials:**
-  * [Python ZUGFeRD Guide](https://e-rechnung-api.fly.dev/tutorials/python-zugferd)
-  * [Make.com No-Code Guide](https://e-rechnung-api.fly.dev/tutorials/make-zugferd)
-  * [n8n Automation Guide](https://e-rechnung-api.fly.dev/tutorials/n8n-e-rechnung)
-  * [PHP / Laravel Guide](https://e-rechnung-api.fly.dev/tutorials/php-zugferd)
-  * [WooCommerce & Shopify Guide](https://e-rechnung-api.fly.dev/tutorials/woocommerce-e-rechnung)
-  * [Power Automate Guide](https://e-rechnung-api.fly.dev/tutorials/power-automate-zugferd)
+  * [Python ZUGFeRD Guide](https://e-rechnung-cloud.de/tutorials/python-zugferd)
+  * [Make.com No-Code Guide](https://e-rechnung-cloud.de/tutorials/make-zugferd)
+  * [n8n Automation Guide](https://e-rechnung-cloud.de/tutorials/n8n-e-rechnung)
+  * [PHP / Laravel Guide](https://e-rechnung-cloud.de/tutorials/php-zugferd)
+  * [WooCommerce & Shopify Guide](https://e-rechnung-cloud.de/tutorials/woocommerce-e-rechnung)
+  * [Power Automate Guide](https://e-rechnung-cloud.de/tutorials/power-automate-zugferd)
 
 ---
 
 ## 🇬🇧 English Overview & Features
 
-`zugferd-client` is the official Python SDK for the [E-Rechnung API](https://e-rechnung-api.fly.dev), designed to simplify European e-invoicing compliance under **EN 16931**:
+`zugferd-client` is the official Python SDK for the [E-Rechnung API](https://e-rechnung-cloud.de), designed to simplify European e-invoicing compliance under **EN 16931**:
 
 * **Hybrid PDF/A-3 Generation:** Create invoices with embedded `factur-x.xml` (ZUGFeRD 2.2 / Factur-X) in MINIMUM, BASIC, EN 16931 (COMFORT), or EXTENDED profiles.
 * **XRechnung (XML-only):** Generate pure CII XML required for German public sector mandates (B2G).
 * **Validation Engine:** Validate incoming PDF/A-3 and XML invoices against official XSD schemas and EN 16931 business rules.
-* **Free Online Validator:** Test your invoices instantly in your browser at [e-rechnung-api.fly.dev/validator](https://e-rechnung-api.fly.dev/validator).
+* **Free Online Validator:** Test your invoices instantly in your browser at [e-rechnung-cloud.de/validator](https://e-rechnung-cloud.de/validator).
 * **Zero Heavy Dependencies:** Pure Python package with fast HTTP client and typed models.
 
 ---

@@ -6,7 +6,7 @@
     "version": "1.0.0",
     "contact": {
       "name": "E-Rechnung API Support",
-      "url": "https://e-rechnung-api.fly.dev"
+      "url": "https://e-rechnung-cloud.de"
     }
   },
   "paths": {
@@ -755,7 +755,7 @@
   ],
   "servers": [
     {
-      "url": "https://e-rechnung-api.fly.dev",
+      "url": "https://e-rechnung-cloud.de",
       "description": "Produktions-Server"
     }
   ],
