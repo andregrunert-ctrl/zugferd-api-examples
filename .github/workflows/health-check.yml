@@ -30,10 +30,14 @@ jobs:
           pip install requests
 
       - name: 1. Generate ZUGFeRD Invoice against Live API
+        env:
+          ZUGFERD_INTERNAL_CI: "true"
         run: |
           python examples/generate_invoice.py
           test -s invoice_test.pdf || { echo "ERROR: invoice_test.pdf was not generated or is empty"; exit 1; }
 
       - name: 2. Validate Generated Invoice against Live API
+        env:
+          ZUGFERD_INTERNAL_CI: "true"
         run: |
           python examples/validate_invoice.py

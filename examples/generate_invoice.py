@@ -1,7 +1,18 @@
+import os
 import requests
 
 API_URL = "https://e-rechnung-cloud.de/v1/invoice/generate"
 API_KEY = "zg_test_ouroboros_001"
+
+headers = {
+    "X-API-Key": API_KEY,
+    "Content-Type": "application/json"
+}
+
+# Interne CI-Läufe (z.B. GitHub Actions Nightly) kennzeichnen, um Kunden-Telemetrie nicht zu verzerren
+if os.getenv("GITHUB_ACTIONS") or os.getenv("ZUGFERD_INTERNAL_CI"):
+    headers["X-Internal-Check"] = "github-actions-healthcheck"
+    headers["User-Agent"] = "ZUGFeRD-Internal-CI/1.0"
 
 payload = {
     "invoice_number": "RE-2026-002",
@@ -30,7 +41,7 @@ payload = {
 print("Sende Request an die Live-API...")
 response = requests.post(
     API_URL,
-    headers={"X-API-Key": API_KEY, "Content-Type": "application/json"},
+    headers=headers,
     json=payload
 )
 

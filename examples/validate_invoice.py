@@ -9,10 +9,15 @@ if not os.path.exists("invoice_test.pdf"):
 
 print("Sende PDF zur Validierung an die Live-API...")
 
+headers = {"X-API-Key": "zg_test_ouroboros_001"}
+if os.getenv("GITHUB_ACTIONS") or os.getenv("ZUGFERD_INTERNAL_CI"):
+    headers["X-Internal-Check"] = "github-actions-healthcheck"
+    headers["User-Agent"] = "ZUGFeRD-Internal-CI/1.0"
+
 with open("invoice_test.pdf", "rb") as f:
     response = requests.post(
         API_URL,
-        headers={"X-API-Key": "zg_test_ouroboros_001"},
+        headers=headers,
         files={"file": ("invoice_test.pdf", f, "application/pdf")}
     )
 
