@@ -2,9 +2,12 @@ import os
 import pytest
 from zugferd_client import ZugferdClient, ValidationResult, BillingStatus
 
+os.environ["ZUGFERD_INTERNAL_CI"] = "1"
+
 SAMPLE_INVOICE = {
     "invoice_number": "SDK-TEST-2026-001",
     "issue_date": "2026-10-09",
+    "buyer_reference": "04011000-1234512345-06",
     "seller": {
         "name": "Muster GmbH",
         "street": "Hauptstraße 1",

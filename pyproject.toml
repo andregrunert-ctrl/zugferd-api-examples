@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "zugferd-client"
-version = "0.1.0"
+version = "0.1.1"
 description = "Offizieller Python-Client für die E-Rechnung API (ZUGFeRD 2.2 / Factur-X & XRechnung nach EN 16931)"
 readme = "README.md"
 requires-python = ">=3.8"

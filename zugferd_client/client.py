@@ -44,10 +44,12 @@ class ZugferdClient:
 
     def _headers(self, custom_headers: Optional[Dict[str, str]] = None) -> Dict[str, str]:
         headers = {
-            "User-Agent": "zugferd-client-python/0.1.0",
+            "User-Agent": "zugferd-client-python/0.1.1",
         }
         if self.api_key:
             headers["X-API-Key"] = self.api_key
+        if os.getenv("ZUGFERD_INTERNAL_CI") == "1":
+            headers["X-Internal-CI"] = "1"
         if custom_headers:
             headers.update(custom_headers)
         return headers

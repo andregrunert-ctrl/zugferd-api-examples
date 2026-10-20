@@ -1,6 +1,6 @@
 # zugferd-client
 
-[![PyPI version](https://img.shields.io/badge/pypi-v0.1.0-blue.svg)](https://pypi.org/project/zugferd-client/)
+[![PyPI version](https://img.shields.io/badge/pypi-v0.1.1-blue.svg)](https://pypi.org/project/zugferd-client/)
 [![Python](https://img.shields.io/badge/python-3.8+-blue.svg)](https://pypi.org/project/zugferd-client/)
 [![Online Validator](https://img.shields.io/badge/Online%20Validator-Kostenlos%20testen-success.svg)](https://e-rechnung-cloud.de/validator)
 [![Live API Health Check](https://github.com/andregrunert-ctrl/zugferd-api-examples/actions/workflows/health-check.yml/badge.svg)](https://github.com/andregrunert-ctrl/zugferd-api-examples/actions/workflows/health-check.yml)
@@ -97,9 +97,10 @@ pdf_bytes = client.embed_invoice(
 ```
 
 ### 3. XRechnung XML generieren (`generate_xrechnung`)
-Erstellt eine reine EN 16931 XML-Datei (ohne visuelles PDF) – gesetzlich vorgeschrieben für Bundesbehörden und B2G in Deutschland.
+Erstellt eine reine EN 16931 XML-Datei (ohne visuelles PDF) – gesetzlich vorgeschrieben für Bundesbehörden und B2G in Deutschland (unterstützt `buyer_reference` / Leitweg-ID `BT-10`).
 
 ```python
+invoice_data["buyer_reference"] = "04011000-1234512345-06"  # Leitweg-ID (BT-10)
 xml_string = client.generate_xrechnung(invoice_data, output_path="xrechnung.xml")
 ```
 

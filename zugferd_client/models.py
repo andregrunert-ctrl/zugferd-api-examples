@@ -13,7 +13,7 @@ class ValidationResult:
 
 @dataclass
 class BillingStatus:
-    """Status und verbleibendes Dokumenten-Guthaben eines API-Keys."""
+    """Status und verbleibendes Dokumenten-Guthaben eines API-Keys (inkl. Support für buyer_reference / BT-10)."""
     api_key_preview: str
     credits_remaining: int
     is_active: bool
