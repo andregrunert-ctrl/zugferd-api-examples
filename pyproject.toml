@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "zugferd-client"
-version = "0.1.1"
-description = "Offizieller Python-Client für die E-Rechnung API (ZUGFeRD 2.2 / Factur-X & XRechnung nach EN 16931)"
+version = "0.2.0"
+description = "Offizieller Python-Client & MCP-Server für die E-Rechnung API (ZUGFeRD 2.2 / Factur-X & XRechnung nach EN 16931)"
 readme = "README.md"
 requires-python = ">=3.8"
 license = { text = "MIT" }
@@ -21,6 +21,10 @@ keywords = [
     "invoice",
     "pdf-a3",
     "billing",
+    "mcp",
+    "model-context-protocol",
+    "claude",
+    "ai-agent",
     "fastapi"
 ]
 classifiers = [
@@ -49,6 +53,9 @@ Documentation = "https://e-rechnung-cloud.de/docs"
 Validator = "https://e-rechnung-cloud.de/validator"
 Repository = "https://github.com/andregrunert-ctrl/zugferd-api-examples"
 "Bug Tracker" = "https://github.com/andregrunert-ctrl/zugferd-api-examples/issues"
+
+[project.scripts]
+zugferd-mcp = "zugferd_client.mcp:main"
 
 [tool.setuptools.packages.find]
 where = ["."]

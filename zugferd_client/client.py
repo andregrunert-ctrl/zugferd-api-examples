@@ -12,6 +12,7 @@ from .exceptions import (
     ApiError,
 )
 from .models import ValidationResult, BillingStatus
+from .leitweg import calculate_leitweg_id as _calc_leitweg_fn
 
 DEFAULT_BASE_URL = "https://e-rechnung-cloud.de"
 DEFAULT_TEST_KEY = "zg_test_ouroboros_001"
@@ -21,6 +22,8 @@ class ZugferdClient:
     Offizieller Python-Client für die E-Rechnung API.
     Unterstützt ZUGFeRD 2.2 / Factur-X (PDF/A-3) und XRechnung nach EN 16931.
     """
+
+    calculate_leitweg_id = staticmethod(_calc_leitweg_fn)
 
     def __init__(
         self,

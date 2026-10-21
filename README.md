@@ -1,7 +1,8 @@
 # zugferd-client
 
-[![PyPI version](https://img.shields.io/badge/pypi-v0.1.1-blue.svg)](https://pypi.org/project/zugferd-client/)
+[![PyPI version](https://img.shields.io/badge/pypi-v0.2.0-blue.svg)](https://pypi.org/project/zugferd-client/)
 [![Python](https://img.shields.io/badge/python-3.8+-blue.svg)](https://pypi.org/project/zugferd-client/)
+[![MCP Server](https://img.shields.io/badge/MCP-Model%20Context%20Protocol-green.svg)](https://e-rechnung-cloud.de)
 [![Online Validator](https://img.shields.io/badge/Online%20Validator-Kostenlos%20testen-success.svg)](https://e-rechnung-cloud.de/validator)
 [![Live API Health Check](https://github.com/andregrunert-ctrl/zugferd-api-examples/actions/workflows/health-check.yml/badge.svg)](https://github.com/andregrunert-ctrl/zugferd-api-examples/actions/workflows/health-check.yml)
 [![Standard](https://img.shields.io/badge/Standard-EN%2016931%20%7C%20ZUGFeRD%202.2-blue)](https://e-rechnung-cloud.de)
@@ -123,6 +124,58 @@ Fragt das verbleibende Dokumenten-Guthaben deines Keys ab:
 status = client.get_billing_status()
 print(f"Verbleibende Dokumente: {status.credits_remaining}")
 ```
+
+### 6. Leitweg-ID prüfen & berechnen (`calculate_leitweg_id`)
+Prüft eine bestehende deutsche Leitweg-ID oder berechnet die 2-stellige Prüfziffer nach ISO/IEC 7064 MOD 97-10:
+
+```python
+result = client.calculate_leitweg_id("04011000-1234512345-06")
+print(result["is_valid"])  # True
+print(result["region"])    # Freie Hansestadt Bremen (04)
+```
+
+---
+
+## 🤖 MCP-Server (Model Context Protocol für KI-Assistenten)
+
+`zugferd-client` bringt einen integrierten **MCP-Server** (Model Context Protocol) mit. Damit können KI-Assistenten (**Claude Desktop**, **Cursor**, **Antigravity**, **Cline**, **Windsurf**) E-Rechnungen eigenständig erstellen, validieren und Leitweg-IDs prüfen.
+
+### Konfiguration in Claude Desktop (`claude_desktop_config.json`)
+
+```json
+{
+  "mcpServers": {
+    "zugferd": {
+      "command": "zugferd-mcp",
+      "env": {
+        "ZUGFERD_API_KEY": "zg_test_ouroboros_001"
+      }
+    }
+  }
+}
+```
+
+Oder alternativ direkt via Python:
+```json
+{
+  "mcpServers": {
+    "zugferd": {
+      "command": "python",
+      "args": ["-m", "zugferd_client.mcp"],
+      "env": {
+        "ZUGFERD_API_KEY": "zg_test_ouroboros_001"
+      }
+    }
+  }
+}
+```
+
+### Verfügbare MCP-Tools:
+* `validate_invoice`: Validiert PDFs oder XMLs zu 100 % flüchtig im RAM (DSGVO-konform, kein Speichern auf Festplatte).
+* `calculate_leitweg_id`: Berechnet und validiert die 2-stellige Prüfziffer (ISO 7064 MOD 97-10) und decodiert das Bundesland.
+* `generate_zugferd_invoice`: Erzeugt vollwertige ZUGFeRD 2.2 / Factur-X PDF/A-3 Dokumente nach EN 16931.
+* `generate_xrechnung`: Erzeugt behördenkonforme XRechnung (CII XML) für B2G.
+* `check_billing_status`: Fragt verbleibendes Dokumenten-Guthaben und Status des API-Keys ab.
 
 ---
 
