@@ -1,0 +1,17 @@
+startCommand:
+  type: stdio
+  configSchema:
+    type: object
+    properties:
+      apiKey:
+        type: string
+        default: "zg_test_ouroboros_001"
+        description: "E-Rechnung Cloud API Key (defaults to public test key zg_test_ouroboros_001)"
+  commandFunction: |-
+    (config) => ({
+      command: 'zugferd-mcp',
+      args: [],
+      env: {
+        ZUGFERD_API_KEY: config.apiKey || 'zg_test_ouroboros_001'
+      }
+    })
