@@ -9,6 +9,8 @@
 [![Format](https://img.shields.io/badge/Format-PDF%2FA--3%20%2B%20Factur--X-purple)](https://e-rechnung-cloud.de)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
+[![45-Sekunden Video Showcase (1080p)](docs/showcase_video_banner.png)](https://youtu.be/xkDNnPjQxRo)
+
 Der offizielle, leichtgewichtige Python-Client für die [E-Rechnung API](https://e-rechnung-cloud.de). 
 
 > 🔍 **Kostenloser Online-Validator:** Teste und validiere deine ZUGFeRD- & XRechnung-Dateien direkt im Browser ohne Registrierung: [e-rechnung-cloud.de/validator](https://e-rechnung-cloud.de/validator)
