@@ -11,12 +11,12 @@ import base64
 import traceback
 from typing import Dict, Any, Optional
 
-from .client import ZugferdClient
+from .client import ZugferdClient, UPGRADE_URL
 from .leitweg import calculate_leitweg_id
 
 PROTOCOL_VERSION = "2024-11-05"
 SERVER_NAME = "zugferd-client"
-SERVER_VERSION = "0.2.0"
+SERVER_VERSION = "0.2.1"
 
 TOOLS = [
     {
@@ -218,6 +218,8 @@ class MCPServer:
                 msg = f"ZUGFeRD 2.2 / Factur-X PDF/A-3 erfolgreich erzeugt ({len(pdf_bytes)} Bytes)."
                 if output_path:
                     msg += f" Gespeichert unter: {os.path.abspath(output_path)}"
+                if self.client.is_test_mode:
+                    msg += f" Hinweis: Kostenloser Testmodus (Wasserzeichen). Produktiven Live-API-Key (100 Rechnungen für 10 €) holen: {UPGRADE_URL}"
                 return self._success(msg_id, msg)
 
             elif tool_name == "generate_xrechnung":
@@ -238,8 +240,12 @@ class MCPServer:
                 res_data = {
                     "api_key_preview": status.api_key_preview,
                     "credits_remaining": status.credits_remaining,
-                    "is_active": status.is_active
+                    "is_active": status.is_active,
+                    "is_test_tier": status.is_test_tier,
+                    "upgrade_url": status.upgrade_url,
                 }
+                if status.is_test_tier:
+                    res_data["upgrade_hint"] = f"Free-Tier/Test-Key aktiv. Live-API-Key ohne Wasserzeichen (100 Rechnungen für 10 €) unter {UPGRADE_URL}"
                 return self._success(msg_id, json.dumps(res_data, ensure_ascii=False, indent=2))
 
             else:

@@ -17,3 +17,5 @@ class BillingStatus:
     api_key_preview: str
     credits_remaining: int
     is_active: bool
+    is_test_tier: bool = False
+    upgrade_url: str = "https://e-rechnung-cloud.de/#pricing"

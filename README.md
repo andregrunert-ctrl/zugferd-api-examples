@@ -1,6 +1,6 @@
 # zugferd-client
 
-[![PyPI version](https://img.shields.io/badge/pypi-v0.2.0-blue.svg)](https://pypi.org/project/zugferd-client/)
+[![PyPI version](https://img.shields.io/badge/pypi-v0.2.1-blue.svg)](https://pypi.org/project/zugferd-client/)
 [![Python](https://img.shields.io/badge/python-3.8+-blue.svg)](https://pypi.org/project/zugferd-client/)
 [![MCP Server](https://img.shields.io/badge/MCP-Model%20Context%20Protocol-green.svg)](https://e-rechnung-cloud.de)
 [![Online Validator](https://img.shields.io/badge/Online%20Validator-Kostenlos%20testen-success.svg)](https://e-rechnung-cloud.de/validator)
@@ -181,9 +181,9 @@ Oder alternativ direkt via Python:
 
 ---
 
-## 🔑 Eigener API-Key & Produktion
+## 🔑 Eigener API-Key & Produktion (Sofort-Upgrade ohne Abo)
 
-Für produktive Rechnungen ohne Test-Wasserzeichen übergibst du deinen persönlichen Key oder setzt die Umgebungsvariable `ZUGFERD_API_KEY`:
+Für produktive Rechnungen **ohne Test-Wasserzeichen** und mit vollem Rate-Limit (`100 Req/Min`) holst du dir in 30 Sekunden deinen persönlichen API-Key (z. B. **100 Rechnungen für 10 € Prepaid – kein Abo!**) unter [**https://e-rechnung-cloud.de/#pricing**](https://e-rechnung-cloud.de/#pricing) und übergibst ihn per Umgebungsvariable `ZUGFERD_API_KEY`:
 
 ```bash
 export ZUGFERD_API_KEY="zg_live_..."

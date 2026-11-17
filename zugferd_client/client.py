@@ -1,6 +1,7 @@
 import io
 import json
 import os
+import warnings
 from typing import Union, Optional, BinaryIO, Dict, Any
 import requests
 
@@ -15,6 +16,7 @@ from .models import ValidationResult, BillingStatus
 from .leitweg import calculate_leitweg_id as _calc_leitweg_fn
 
 DEFAULT_BASE_URL = "https://e-rechnung-cloud.de"
+UPGRADE_URL = "https://e-rechnung-cloud.de/#pricing"
 DEFAULT_TEST_KEY = "zg_test_ouroboros_001"
 
 class ZugferdClient:
@@ -43,11 +45,23 @@ class ZugferdClient:
         self.api_key = api_key or os.getenv("ZUGFERD_API_KEY", DEFAULT_TEST_KEY)
         self.base_url = base_url.rstrip("/")
         self.timeout = timeout
+        self.is_test_mode = (
+            self.api_key == DEFAULT_TEST_KEY
+            or self.api_key == "api_key_test_public"
+            or self.api_key.startswith("zg_test_")
+        )
         self._session = requests.Session()
+        if self.is_test_mode and os.getenv("ZUGFERD_INTERNAL_CI") != "1":
+            warnings.warn(
+                f"ZugferdClient läuft im kostenlosen Testmodus (Wasserzeichen & 5 Req/Min). "
+                f"Jetzt Live-API-Key ohne Wasserzeichen holen (100 Rechnungen für 10 € ohne Abo): {UPGRADE_URL}",
+                UserWarning,
+                stacklevel=2,
+            )
 
     def _headers(self, custom_headers: Optional[Dict[str, str]] = None) -> Dict[str, str]:
         headers = {
-            "User-Agent": "zugferd-client-python/0.1.1",
+            "User-Agent": "zugferd-client-python/0.2.1",
         }
         if self.api_key:
             headers["X-API-Key"] = self.api_key
@@ -61,9 +75,13 @@ class ZugferdClient:
         if response.status_code == 200:
             return response
         elif response.status_code == 401:
-            raise AuthenticationError("API-Key ist ungültig oder fehlt.")
+            raise AuthenticationError(
+                f"API-Key ist ungültig oder fehlt. Jetzt Live-API-Key holen (100 Rechnungen für 10 € ohne Abo): {UPGRADE_URL}"
+            )
         elif response.status_code == 402:
-            raise QuotaExceededError("Dokumenten-Guthaben ist aufgebraucht.")
+            raise QuotaExceededError(
+                f"Dokumenten-Guthaben ist aufgebraucht. Jetzt sofort Guthaben aufladen (ohne Abo) unter {UPGRADE_URL}"
+            )
         elif response.status_code == 422:
             try:
                 err_data = response.json()
@@ -72,7 +90,10 @@ class ZugferdClient:
                 detail = response.text
             raise ValidationError(f"Ungültige Rechnungsdaten: {detail}", details=detail)
         elif response.status_code == 429:
-            raise RateLimitError("Anfragelimit überschritten (Rate Limit).")
+            raise RateLimitError(
+                f"Anfragelimit des kostenlosen Test-Tiers überschritten (Rate Limit). "
+                f"Für höhere Limits & Live-Keys jetzt upgraden unter {UPGRADE_URL}"
+            )
         else:
             raise ApiError(response.text, status_code=response.status_code, response_text=response.text)
 
@@ -243,5 +264,7 @@ class ZugferdClient:
         return BillingStatus(
             api_key_preview=data.get("api_key_preview", ""),
             credits_remaining=data.get("credits_remaining", 0),
-            is_active=data.get("is_active", False)
+            is_active=data.get("is_active", False),
+            is_test_tier=self.is_test_mode,
+            upgrade_url=UPGRADE_URL,
         )
